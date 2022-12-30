@@ -19,16 +19,38 @@ function App() {
     displayProgressBar: false,
   });
 
-//Handlers
-const handleGetRandomName =()=>{console.log(getRandomName());
-//getRandomName();
-};
-
   //Utility Functions
   let randomName;
   function getRandomName() {
     return (randomName = users[Math.floor(Math.random()* userNames.length)]);
   }
+
+  //Handlers
+  const handleGetRandomName = () => {
+      setUiProps ({
+        buttonDisabled: true,
+        displayProgressBar:true,
+    });
+    setTimeout(() => {
+      getRandomName();
+
+      // Add random name to winner list
+      setWinners([...winners, randomName]);
+      //update and remove the random name from our users
+      const updateNameList=users.filter((user) => user !== randomName);
+
+      setUsers(updateNameList);
+      setUiProps ({
+        buttonDisabled: false,
+        displayProgressBar: false,
+      });
+
+    }, 3000)
+    //console.log(getRandomName());
+
+};
+
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -45,7 +67,8 @@ const handleGetRandomName =()=>{console.log(getRandomName());
        
           <h1>30</h1>
         
-        <button onClick={handleGetRandomName}>Get Random Name</button>
+        <button onClick={handleGetRandomName} disabled={uiProps.buttonDisabled}
+        >Get Random Name</button>
         </div>
         <ul className="winners">
           {winners.map((winner,index) =>
