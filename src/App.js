@@ -1,11 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import { userNames } from './components/userList';
-import { useState} from "react";
+import { useState } from "react";
 import React from 'react';
 
 //Components
 import { ProgressBar } from './components/ProgressBar';
+import { Spinner } from './components/Spinner';
 
 function App() {
 
@@ -18,6 +19,12 @@ function App() {
     buttonDisabled: false,
     displayProgressBar: false,
   });
+
+  const [error, setError] = useState({
+    processTime: 3000,
+    loading: false,
+  });
+
 
   //Utility Functions
   let randomName;
@@ -33,22 +40,33 @@ function App() {
     });
     setTimeout(() => {
       getRandomName();
+      console.log(randomName);
 
-      // Add random name to winner list
-      setWinners([...winners, randomName]);
-      //update and remove the random name from our users
-      const updateNameList=users.filter((user) => user !== randomName);
+      if(typeof randomName === "undefined") {
+        //handle error
+        setError({processTime:1000, loading: true});
+        handleGetRandomName();
+      } else {
 
-      setUsers(updateNameList);
-      setUiProps ({
-        buttonDisabled: false,
-        displayProgressBar: false,
-      });
+          // Add random name to winner list
+          setWinners([...winners, randomName]);
+          //update and remove the random name from our users
+          const updateNameList=users.filter((user) => user !== randomName);
 
-    }, 3000)
-    //console.log(getRandomName());
+          setUsers(updateNameList);
 
-};
+          setUiProps ({
+            buttonDisabled: false,
+            displayProgressBar: false,
+          });
+          setError({
+            processTime: 3000,
+            loading: false,
+          });
+        } 
+      }, error.processTime);
+      //console.log(getRandomName());
+  };
 
   
   return (
@@ -63,7 +81,9 @@ function App() {
         </ul>
         <div className="react-container">
           {uiProps.displayProgressBar && <ProgressBar/>}
-        {<img src={logo} className="App-logo" alt="logo" />}
+        {error.loading? (< Spinner />
+        ) : (<img src={logo} className="App-logo" alt="logo" />)}
+        
        
           <h1>30</h1>
         
@@ -79,6 +99,6 @@ function App() {
       </header>
     </div>
   );
-}
+};
 
 export default App;
