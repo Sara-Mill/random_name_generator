@@ -1,4 +1,4 @@
-# Random Name Genertor
+# Random Name Generator
 Uses React.js
 
 # User Story
