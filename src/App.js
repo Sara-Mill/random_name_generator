@@ -60,7 +60,7 @@ function App() {
             displayProgressBar: false,
           });
           setError({
-            processTime: 3000,
+            processTime: 4000,
             loading: false,
           });
         } 
@@ -83,14 +83,12 @@ function App() {
           {uiProps.displayProgressBar && <ProgressBar/>}
         {error.loading? (< Spinner />
         ) : (<img src={logo} className="App-logo" alt="logo" />)}
-        
-       
-          <h1>30</h1>
+  
         
         <button onClick={handleGetRandomName} disabled={uiProps.buttonDisabled}
         >Get Random Name</button>
         </div>
-        <ul className="winners">
+        <ul className="winners">Chosen Name by Random
           {winners.map((winner,index) =>
           <li key={index} className="list-item">{winner}</li>
           )}
